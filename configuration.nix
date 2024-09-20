@@ -8,7 +8,12 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./nixosModules/services/sopel.nix
+      #./modules/services/sopel.nix
+
+      # System modules
+      ./modules/podman.nix
+      ./modules/nginx_rproxy/main.nix
+      ./modules/thelounge.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -21,6 +26,8 @@
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   #  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  virtualisation.oci-containers.backend = "podman";
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -76,53 +83,18 @@
   environment.systemPackages = with pkgs; [
     wget
     vim
-    factorio-headless
-    python312Packages.sopel
     git
+    #python312Packages.sopel
+    #(python312Packages.sopel.overridePythonAttrs(o: { dependencies = o.dependencies ++ [ pkgs.python312Packages.packaging ]; }))
   ];
 
-  nixpkgs.config.allowUnfree = true;
-
-  services.factorio = {
-    enable = true;
-    openFirewall = true;
-    extraSettingsFile = "/var/lib/factorio/secrets.json";
-    saveName = "DuckCubed";
-    game-name = "DuckCubed";
-    description = "A German and a Dane walks in to a biter";
-    admins = [ "duckle29" "thehexacube" ];
-    autosave-interval = 60;
-    extraSettings = { auto_pause = true; };
-    loadLatestSave = true;
-
-    mods =
-    let
-      inherit (pkgs) lib;
-      modDir = /opt/factorio/mods;
-      modList = lib.pipe modDir [
-        builtins.readDir
-        (lib.filterAttrs (k: v: v == "regular"))
-        (lib.mapAttrsToList (k: v: k))
-        (builtins.filter (lib.hasSuffix ".zip"))
-      ];
-      modToDrv = modFileName:
-        pkgs.runCommand "copy-factorio-mods" {} ''
-          mkdir $out
-          cp ${modDir + "/${modFileName}"} $out/${modFileName}
-        ''
-        // { deps = []; };
-    in
-      builtins.map modToDrv modList;
-    
-  };
-
-  services.sopel.settings = {
-    enable = true;
-    nick = "TestBotPlzIgnore";
-    auth_method = "sasl";
-    auth_username = "TestBotPlzIgnore";
-    auth_password = "hunter2";
-  };
+  # services.sopel = {
+  #  enable = true;
+  #  environmentFile = "/var/lib/sopel/secrets.env";
+  #  settings.core = {
+  #    nick = "TestBotPlzIgnore";
+  #  };
+  # };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -147,8 +119,6 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
-
-  virtualisation.docker.enable = true;  
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
