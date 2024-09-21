@@ -1,14 +1,14 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 let
-  thelounge = pkgs.thelounge.overrideAttrs {
+  thelounge = pkgs.thelounge.overrideAttrs (prev: {
     version = "4.4.3";
-      src = lib.fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       owner = "thelounge";
       repo = "thelounge";
       rev = "v4.4.3";
-      hash = "";
+      hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
     };
-  };
+  });
 in
 {
   config = {
