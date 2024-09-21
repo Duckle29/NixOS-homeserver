@@ -8,6 +8,10 @@ let
       rev = "v4.4.3";
       hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
     };
+    offlineCache = pkgs.fetchYarnDeps {   
+      yarnLock = "${prev.src}/yarn.lock";
+      hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
+    };
   });
 in
 {
