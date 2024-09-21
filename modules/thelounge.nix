@@ -1,8 +1,19 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
+let
+  thelounge = pkgs.thelounge.overrideAttrs {
+    version = "4.4.3";
+      src = lib.fetchFromGitHub {
+      owner = "thelounge";
+      repo = "thelounge";
+      rev = "v4.4.3";
+      hash = "";
+    };
+  };
+in
 {
   config = {
     environment.systemPackages = [
-      pkgs.thelounge
+      thelounge
     ];
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
