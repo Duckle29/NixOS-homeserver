@@ -33,7 +33,9 @@
 
         messageStorage = [ "sqlite" ];
         storagePolicy = {
-          enabled = false;
+          enabled = true;
+          maxAgeDays = 30;
+          deletionPolicy = "statusOnly";
         };
       };
     };
