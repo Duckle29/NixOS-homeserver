@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
 
   new_src = pkgs.fetchFromGitHub {
@@ -16,6 +16,9 @@ let
       yarnLock = "${new_src}/yarn.lock";
       hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
     };
+
+    nativeBuildInputs = (lib.lists.remove pkgs.python3 prev.nativeBuildInputs ++ [ pkgs.python310 ]);
+
   });
 in
 {
