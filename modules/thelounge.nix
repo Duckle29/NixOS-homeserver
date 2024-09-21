@@ -8,8 +8,8 @@ let
     hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
   };
 
-  thelounge = pkgs.thelounge.overrideAttrs (prev: {
-    version = "4.4.3";
+  my_thelounge = pkgs.thelounge.overrideAttrs (prev: {
+    #version = "4.4.3";
     src = new_src;
 
     offlineCache = pkgs.fetchYarnDeps {   
@@ -24,12 +24,13 @@ in
 {
   config = {
     environment.systemPackages = [
-      thelounge
+      my_thelounge
     ];
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
   
     services.thelounge = {
+      package = my_thelounge;
       enable = true;
       public = false;
       port = 9000;
