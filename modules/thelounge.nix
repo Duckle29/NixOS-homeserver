@@ -1,16 +1,20 @@
 { config, pkgs, ... }:
 let
+
+  new_src = pkgs.fetchFromGitHub {
+    owner = "thelounge";
+    repo = "thelounge";
+    rev = "v4.4.3";
+    hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
+  };
+
   thelounge = pkgs.thelounge.overrideAttrs (prev: {
     version = "4.4.3";
-    src = pkgs.fetchFromGitHub {
-      owner = "thelounge";
-      repo = "thelounge";
-      rev = "v4.4.3";
-      hash = "sha256-lDbyqVFjhF2etRx31ax7KiQ1QKgVhD8xkTog/E3pUlA=";
-    };
+    src = new_src;
+
     offlineCache = pkgs.fetchYarnDeps {   
-      yarnLock = "${prev.src}/yarn.lock";
-      hash = "sha256-MM6SgVT7Pjdu96A4eWRucEzT7uNPxBqUDgHKl8mH2C0=";
+      yarnLock = "${new_src}/yarn.lock";
+      hash = "sha256-csVrgsEy9HjSBXxtgNG0hcBrR9COlcadhMQrw6BWPc4=";
     };
   });
 in
