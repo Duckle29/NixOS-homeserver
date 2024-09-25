@@ -49,7 +49,7 @@ in
     
     services.sopel.settings.core = {
       homedir = lib.mkDefault "/var/lib/sopel";
-      pid_dir = lib.mkDefault "/run/sopel";
+      pid_dir = lib.mkDefault "/var/lib/sopel";
       logdir = lib.mkDefault "/var/log/sopel";
       nick = lib.mkDefault "SopelBot";
       host = lib.mkDefault "irc.libera.chat";
@@ -72,7 +72,7 @@ in
         RuntimeDirectory = "sopel";
         StateDirectory = "sopel";
         LogsDirectory = "sopel";
-        PIDFile = "/run/sopel/sopel.pid";
+        PIDFile = "/var/lib/sopel/sopel.pid";
         #ExecStart = "${pkgs.python312Packages.sopel}/bin/sopel -c ${configFile}";
         ExecStart = "/run/current-system/sw/bin/sopel -c ${configFile}";
         Restart = "on-failure";

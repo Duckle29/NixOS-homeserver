@@ -1,12 +1,13 @@
 { ... }:
 let
-  secrets_file = "cert_mikkel.cc";
+  domain = "snuletek.org";
+  secrets_file = "cert_${domain}";
   secrets_folder = "/var/lib/secrets";
 in
 {
-  systemd.services.acme_secrets_oneshot = {
-    requiredBy = ["acme-mikkel.cc.service"];
-    before = ["acme-mikkel.cc.service"];
+  systemd.services.acme_secrets_oneshot_snuletek = {
+    requiredBy = ["acme-${domain}.service"];
+    before = ["acme-${domain}.service"];
     unitConfig = {
       ConditionPathExists = "!${secrets_folder}/${secrets_file}";
     };
@@ -29,8 +30,8 @@ in
     # Use staging server
     # defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
     defaults.email = "mikkel+acme@mikkel.cc";
-    certs."mikkel.cc" = {
-      domain = "*.mikkel.cc";
+    certs."${domain}" = {
+      domain = "*.${domain}";
       dnsProvider = "cloudflare";
       environmentFile = "${secrets_folder}/${secrets_file}";
       group = "nginx";

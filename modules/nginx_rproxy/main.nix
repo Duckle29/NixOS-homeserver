@@ -12,7 +12,8 @@
   };
 
   imports = [
-    ./ssl_certs.nix
+    ./ssl_certs_mikkel.cc.nix
+    ./ssl_certs_snuletek.org.nix
     ./vhosts.d/thelounge.nix
   ];
 }

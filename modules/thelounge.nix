@@ -45,11 +45,11 @@ in
         theme = "morning";
         prefetch = true;
         prefetchStorage = true;
-        prefetchMaxImageSize = 10240;
+        prefetchMaxImageSize = 20000;
 
         fileUpload = {
           enable = true;
-          maxFileSize = 102400;
+          maxFileSize = 50000;
           baseUrl = "https://lounge.mikkel.cc/uploads/";
         };
         leaveMessage = "Poof goes the quack";

@@ -8,7 +8,9 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      #./modules/services/sopel.nix
+      
+      # Stuff
+      ./services/sopel.nix
 
       # System modules
       ./modules/podman.nix
@@ -48,8 +50,6 @@
   # services.xserver.enable = true;
 
 
-  
-
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
   # services.xserver.xkb.options = "eurosign:e,caps:escape";
@@ -85,16 +85,39 @@
     vim
     git
     #python312Packages.sopel
-    #(python312Packages.sopel.overridePythonAttrs(o: { dependencies = o.dependencies ++ [ pkgs.python312Packages.packaging ]; }))
+    (python312Packages.sopel.overridePythonAttrs(o: { dependencies = o.dependencies ++ [ pkgs.python312Packages.packaging ]; }))
   ];
 
-  # services.sopel = {
-  #  enable = true;
-  #  environmentFile = "/var/lib/sopel/secrets.env";
-  #  settings.core = {
-  #    nick = "TestBotPlzIgnore";
-  #  };
-  # };
+  services.sopel = {
+    enable = true;
+    environmentFile = "/var/lib/sopel/secrets.env";
+    settings.core = {
+      nick = "DumDuckBot";
+      channels = ''
+        ''\n''\t"##botspam"
+        ''\t"#reprap"
+        ''\t"##electronics"
+      '';
+      enable = ''
+        ''\n''\tcurrency
+        ''\txkcd
+        ''\twolfram
+        ''\tcalc
+        ''\tadmin
+      '';
+    };
+    settings.currency = {
+      auto_convert = true;
+    };
+    settings.wolfram = {
+      max_public = 3;
+      units = "metric";
+    };
+    settings.admin = {
+      hold_ground = false;
+      auto_accept_invite = true;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
