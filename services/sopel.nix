@@ -75,7 +75,7 @@ in
         PIDFile = "/var/lib/sopel/sopel.pid";
         #ExecStart = "${pkgs.python312Packages.sopel}/bin/sopel -c ${configFile}";
         ExecStart = "/run/current-system/sw/bin/sopel -c ${configFile}";
-        Restart = "on-failure";
+        Restart = "always";
         RestartSec = "30";
         EnvironmentFile = cfg.environmentFile;
         # Environment = "LC_ALL=en_US.UTF-8 SOPEL_CONFIG_DIR=/etc/sopel";
