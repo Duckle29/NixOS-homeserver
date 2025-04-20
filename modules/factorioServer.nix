@@ -5,7 +5,7 @@
     nixpkgs.config.allowUnfree = true;
 
     environment.systemPackages = [
-      factorio-headless
+      pkgs.factorio-headless
     ];
   
     services.factorio = {

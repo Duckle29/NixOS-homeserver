@@ -15,5 +15,9 @@
     ./ssl_certs_mikkel.cc.nix
     ./ssl_certs_snuletek.org.nix
     ./vhosts.d/thelounge.nix
+    ./vhosts.d/immich.nix
+    ./vhosts.d/delugeweb.nix
+    ./vhosts.d/joplin.nix
+    ./vhosts.d/unifi.nix
   ];
 }

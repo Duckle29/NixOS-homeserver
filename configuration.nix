@@ -5,17 +5,25 @@
 { config, lib, pkgs, ... }:
 
 {
+  nixpkgs.config.allowUnfree = true;
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       
       # Stuff
+      ./storage.nix
+
       ./services/sopel.nix
+      #./modules/factorioServer.nix
+      ./modules/factorio-oci.nix
 
       # System modules
       ./modules/podman.nix
       ./modules/nginx_rproxy/main.nix
       ./modules/thelounge.nix
+      ./modules/deluged.nix
+      ./modules/unifi.nix
+
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -27,7 +35,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  #  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  #  nix.settings.experimental-features = [ "nix-command" ];
 
   virtualisation.oci-containers.backend = "podman";
 
@@ -74,6 +82,11 @@
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 
+  environment.shellAliases = {
+    ls = "ls -lah";
+    code = "sudo code --no-sandbox --user-data-dir=\"/root/.vscode-root\"";
+  };
+
   users.users.mikkel.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICx6EpVwoAbSzb3Diy2kkq3XgR/Frd1/PG3GkJ60sMCo"
   ];
@@ -84,8 +97,10 @@
     wget
     vim
     git
-    #python312Packages.sopel
-    (python312Packages.sopel.overridePythonAttrs(o: { dependencies = o.dependencies ++ [ pkgs.python312Packages.packaging ]; }))
+    xorg.xauth
+    python312Packages.sopel
+    #(python312Packages.sopel.overridePythonAttrs(o: { dependencies = o.dependencies ++ [ pkgs.python312Packages.packaging ]; }))
+    vscode
   ];
 
   services.sopel = {
@@ -132,14 +147,15 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
+    settings.X11Forwarding = true;
     settings.PasswordAuthentication = false;
     settings.KbdInteractiveAuthentication = false;
     settings.PermitRootLogin = "no";
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 22 5201 ];
+  networking.firewall.allowedUDPPorts = [ 34197 5201];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 
