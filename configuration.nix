@@ -147,10 +147,13 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    settings.X11Forwarding = true;
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-    settings.PermitRootLogin = "no";
+    settings = {
+      X11Forwarding = true;
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+      # LogLevel = "DEBUG";
+    };
   };
 
   # Open ports in the firewall.

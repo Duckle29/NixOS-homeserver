@@ -9,6 +9,15 @@
     enable = true;
     recommendedTlsSettings = true;
     recommendedGzipSettings = true;
+
+    virtualHosts = {
+      default = {
+        serverName = "_";
+        default = true;
+        rejectSSL = true;
+        locations."/".return = "444";
+      };
+    };
   };
 
   imports = [
@@ -19,5 +28,6 @@
     ./vhosts.d/delugeweb.nix
     ./vhosts.d/joplin.nix
     ./vhosts.d/unifi.nix
+    ./vhosts.d/inkli_ota.nix
   ];
 }
